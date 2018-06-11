@@ -3,14 +3,14 @@ class Cell {
         this.size = size
         this.column = column
         this.row = row
-        this.walls = { top: true, right: true, bottom: true, left: true }
+        this.connections = {}
     }
 
     highlight() {
+        const s = this.size
+
         noStroke()
         fill(0, 0, 255, 100)
-
-        const s = this.size
         rect(this.column * s, this.row * s, s, s)
     }
 
@@ -21,19 +21,19 @@ class Cell {
 
         stroke(255)
 
-        if (this.walls.top) {
+        if (!this.connections.top) {
             line(x, y, x + s, y)
         }
 
-        if (this.walls.right) {
+        if (!this.connections.right) {
             line(x + s, y, x + s, y + s)
         }
 
-        if (this.walls.bottom) {
+        if (!this.connections.bottom) {
             line(x + s, y + s, x, y + s)
         }
 
-        if (this.walls.left) {
+        if (!this.connections.left) {
             line(x, y + s, x, y)
         }
 
@@ -87,41 +87,36 @@ class Maze {
         }
 
         this.drawBacktrackingLine()
-
         this.current.visited = true
         this.current.highlight()
 
-        const next = this._getRandomNeighbour(this.current)
+        const next = this._chooseUnvisitedNeighbour(this.current)
 
         if (next) {
             next.visited = true
             this.stack.push(this.current)
-            this._removeWalls(this.current, next)
+            this._connect(this.current, next)
             this.current = next
         } else if (this.stack.length > 0) {
             this.current = this.stack.pop()
+        } else {
+            this.done = true
         }
     }
 
-    _removeWalls(a, b) {
-        const x = a.column - b.column
-
-        if (x === 1) {
-            a.walls.left = false
-            b.walls.right = false
-        } else if (x === -1) {
-            a.walls.right = false
-            b.walls.left = false
-        }
-
-        const y = a.row - b.row
-
-        if (y === 1) {
-            a.walls.top = false
-            b.walls.bottom = false
-        } else if (y === -1) {
-            a.walls.bottom = false
-            b.walls.top = false
+    _connect(a, b) {
+        if (a.column > b.column) {
+            a.connections.left = true
+            b.connections.right = true
+        } else if (a.column < b.column) {
+            a.connections.right = true
+            b.connections.left = true
+        } else if (a.row > b.row) {
+            a.connections.top = true
+            b.connections.bottom = true
+        } else {
+            a.connections.bottom = true
+            b.connections.top = true
         }
     }
 
@@ -137,55 +132,39 @@ class Maze {
         return this.cells[column + row * this.nColumns]
     }
 
-    _getRandomNeighbour(cell) {
-        const neighbours = []
+    _chooseUnvisitedNeighbour(cell) {
+        const neighbours = [
+            this._getCellAt(cell.column, cell.row - 1),
+            this._getCellAt(cell.column + 1, cell.row),
+            this._getCellAt(cell.column, cell.row + 1),
+            this._getCellAt(cell.column - 1, cell.row)
+        ].filter(x => x !== null && !x.visited)
 
-        const top = this._getCellAt(cell.column, cell.row - 1)
-        const right = this._getCellAt(cell.column + 1, cell.row)
-        const bottom = this._getCellAt(cell.column, cell.row + 1)
-        const left = this._getCellAt(cell.column - 1, cell.row)
-
-        if (top && !top.visited) {
-            neighbours.push(top)
-        }
-
-        if (right && !right.visited) {
-            neighbours.push(right)
-        }
-
-        if (bottom && !bottom.visited) {
-            neighbours.push(bottom)
-        }
-
-        if (left && !left.visited) {
-            neighbours.push(left)
-        }
-
-        if (neighbours.length === 0) {
-            return null
-        }
-
-        const i = floor(random(0, neighbours.length))
-        return neighbours[i]
+        return neighbours.length > 0
+            ? neighbours[floor(random(0, neighbours.length))]
+            : null
     }
 }
 
 var maze = null
 
 function setup() {
+    const cellSize = 50
     const width = document.documentElement.clientWidth - 30
     const height = window.innerHeight - 40
-
-    const cellSize = 30
     const nColumns = floor(width / cellSize)
     const nRows = floor(height / cellSize)
 
     createCanvas(nColumns * cellSize, nRows * cellSize)
-    frameRate(60)
+    frameRate(11)
 
     maze = new Maze(cellSize, nColumns, nRows)
 }
 
 function draw() {
     maze.draw()
+
+    if (maze.done) {
+        noLoop()
+    }
 }
