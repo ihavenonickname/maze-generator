@@ -181,7 +181,7 @@ function setup() {
     const nRows = floor(height / cellSize)
 
     createCanvas(nColumns * cellSize, nRows * cellSize)
-    frameRate(1)
+    frameRate(60)
 
     maze = new Maze(cellSize, nColumns, nRows)
 }
