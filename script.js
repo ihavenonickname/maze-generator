@@ -149,14 +149,13 @@ class Maze {
 var maze = null
 
 function setup() {
-    const cellSize = 50
+    const cellSize = 40
     const width = document.documentElement.clientWidth - 30
     const height = window.innerHeight - 40
     const nColumns = floor(width / cellSize)
     const nRows = floor(height / cellSize)
 
     createCanvas(nColumns * cellSize, nRows * cellSize)
-    frameRate(11)
 
     maze = new Maze(cellSize, nColumns, nRows)
 }
