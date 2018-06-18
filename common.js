@@ -98,8 +98,8 @@ const pickMiddle = grid => {
 const createGrid = () => {
     const url = new URL(window.location.href)
     const cellSize = parseInt(url.searchParams.get('cell-size'))
-    const width = document.documentElement.clientWidth - 30
-    const height = window.innerHeight - 40
+    const width = document.documentElement.clientWidth
+    const height = window.innerHeight
     const nColumns = floor(width / cellSize)
     const nRows = floor(height / cellSize)
 

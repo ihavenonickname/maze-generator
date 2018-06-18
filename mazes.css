@@ -1,12 +1,12 @@
 body {
-    padding: 20px;
+    padding: 1px;
     margin: 0 auto;
 }
 
 canvas {
+    margin-right: 5px;
+    margin-top: 5px;
     vertical-align: top;
 }
 
-div {
-    margin-bottom: 20px;
-}
+
