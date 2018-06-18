@@ -3,9 +3,9 @@ const drawWalls = cell => {
 
     const s = cell.size
 
-    if (!cell.connections.top) {
-        line(cell.x, cell.y, cell.x + s, cell.y)
-    }
+    // if (!cell.connections.top) {
+    //     line(cell.x, cell.y, cell.x + s, cell.y)
+    // }
 
     if (!cell.connections.right) {
         line(cell.x + s, cell.y, cell.x + s, cell.y + s)
@@ -15,9 +15,9 @@ const drawWalls = cell => {
         line(cell.x + s, cell.y + s, cell.x, cell.y + s)
     }
 
-    if (!cell.connections.left) {
-        line(cell.x, cell.y + s, cell.x, cell.y)
-    }
+    // if (!cell.connections.left) {
+    //     line(cell.x, cell.y + s, cell.x, cell.y)
+    // }
 }
 
 const colorCell = (rgb, cell) => {
