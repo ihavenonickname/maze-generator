@@ -1,0 +1,12 @@
+body {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+canvas {
+    vertical-align: top;
+}
+
+div {
+    margin-bottom: 20px;
+}

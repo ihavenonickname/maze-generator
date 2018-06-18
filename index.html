@@ -1,25 +1,42 @@
 <meta charset="utf-8"/>
 
-<title>Random maze!</title>
-
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.js"
-    type="text/javascript">
-</script>
-
-<script src="script.js" type="text/javascript"></script>
-
 <style>
-    body {
-        padding: 20px;
-        margin: 0 auto;
-    }
+body {
+    padding-top: 10vh;
+    text-align: center;
+}
 
-    canvas {
-        vertical-align: top;
-    }
+a {
+    display: block;
+    padding: 10px 0;
+}
 
-    div {
-        margin-bottom: 20px;
-    }
+input {
+    width: 50px;
+}
+
 </style>
+
+<title>Random maze generators</title>
+<h1>Random maze generators</h1>
+
+<label>
+    Cell size (in pixels):
+    <input type="text" value="60" id="cell-size">
+</label>
+
+<a href="#" id="link-backtracker">Recursive backtracker</a>
+<a href="#" id="link-prim">Prim</a>
+
+<script>
+    const get = id => document.getElementById(id)
+    const cellSize = () => get('cell-size').value
+
+    get('link-backtracker').addEventListener('click', () => {
+        location.href = 'recursive-backtracker.html?cell-size=' + cellSize()
+    })
+
+    get('link-prim').addEventListener('click', () => {
+        location.href = 'prim.html?cell-size=' + cellSize()
+    })
+</script>
